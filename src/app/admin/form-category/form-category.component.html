@@ -1,0 +1,69 @@
+<head>
+    <link rel="stylesheet" href="form-category.component.css">
+</head>
+<div class="form-overlay" *ngIf="isVisible">
+    <div class="form-container">
+      <div class="form-header">
+        <h2>{{ isEditing ? 'Chỉnh sửa thể loại' : 'Thêm thể loại' }}</h2>
+        <button class="close-btn" (click)="closeForm()">X</button>
+      </div>
+  
+      <form [formGroup]="formCategory" (ngSubmit)="onSubmit()">
+        <div class="form-body">
+          <!-- Tên thể loại -->
+          <div class="form-group">
+            <label for="categoryName">Tên thể loại</label>
+            <input type="text" id="categoryName" formControlName="category_name" placeholder="Nhập tên thể loại" required>
+            <div *ngIf="formCategory.get('category_name')?.invalid && formCategory.get('category_name')?.touched">
+                <div *ngIf="formCategory.get('category_name')?.errors?.['required']" class="text-danger">Tên thể loại ko được để trống</div>
+                <!--<div *ngIf="formUser.get('username')?.errors?.['onlyLetters']" class="text-danger">Username chỉ có kí tự</div>
+                -->
+            </div>
+
+          </div>
+  
+          <!-- Mô tả -->
+          <div class="form-group">
+            <label for="description">Mô tả</label>
+            <input type="text" id="description" formControlName="description" placeholder="Nhập mô tả thể loại">
+            <div *ngIf="formCategory.get('description')?.invalid && formCategory.get('description')?.touched">
+                <div *ngIf="formCategory.get('description')?.errors?.['required']" class="text-danger">Tên thể loại ko được để trống</div>
+               
+            </div>
+        </div>
+  
+          <!-- Ảnh -->
+          <div class="form-group">
+            <label for="image_cate">Ảnh</label>
+            @if (isEditing) {
+                <img  id="category-image" [src]="'../../../assets/img_category/' + category.image_cate" alt="Category Image" class="category-img">
+            }@else{
+                <img id="category-image" [src]="" alt="Category Image" class="category-img">
+
+            }
+            <input type="file" id="image_cate" (change)="onFileSelected($event)">
+        </div>
+  
+          <!-- Trạng thái -->
+          <div class="form-group">
+            <label>Trạng thái</label>
+            <div class="status-options">
+                <label>
+                  <input type="radio" formControlName="status" [value]="true"> Kích hoạt
+                </label>
+                <label>
+                  <input type="radio" formControlName="status" [value]="false"> Khóa
+                </label>
+              </div>
+              
+          </div>
+  
+          <!-- Nút submit -->
+          <div class="form-actions">
+            <button type="submit" class="submit-btn" >{{ isEditing ? 'Cập nhật' : 'Thêm mới' }}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  

@@ -1,0 +1,172 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5;
+    margin: 20px;
+    margin-left: -10px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.col-3 {
+    flex-basis: 30%;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.data_table_length {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.data_table_length label {
+    font-size: 16px;
+}
+
+.table-container {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin: 0 auto 20px;
+    background-color: white;
+    width: 1600px;
+}
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+    text-align: left;
+}
+
+.styled-table thead tr {
+    background-color: #009879;
+    color: white;
+    text-align: left;
+    font-weight: bold;
+}
+
+.styled-table th, .styled-table td {
+    padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+.styled-table td.active {
+    color: green;
+    font-weight: bold;
+}
+
+.styled-table td.inactive {
+    color: red;
+    font-weight: bold;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+.paginations {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#radioBtn .btn {
+    margin: 0 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+#radioBtn .Active {
+    background-color: #009879;
+    color: white;
+    font-weight: bold;
+}
+
+#radioBtn .notActive {
+    background-color: #ddd;
+    color: #333;
+}
+.btn-search {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight:   
+   bold;
+    transition: background-color   
+   0.3s ease;
+   margin: 20px;
+  }
+  
+  .btn-search:hover {
+    background-color: #0069d9;
+  }
+  .add-user-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-user-button:hover {
+    background-color: #0069d9;
+  }
+  .refresh-user-button{
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  .refresh-user-button{
+    background-color: #0069d9;
+  }

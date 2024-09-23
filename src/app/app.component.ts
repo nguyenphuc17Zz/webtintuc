@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule } from '@angular/router'; // Import các module cần thiết
+import { CommonModule } from '@angular/common';
+import { FormControl, FormGroup, FormsModule,ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css'],
+  imports: [RouterModule, CommonModule]  // Đảm bảo import RouterModule nếu bạn đang sử dụng routing
 })
-export class AppComponent {
-  title = 'webtintuc';
-}
+export class AppComponent { }

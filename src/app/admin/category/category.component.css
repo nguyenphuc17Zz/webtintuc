@@ -1,0 +1,143 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+  }
+  
+  .category-container {
+
+    width: 100%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 1600px;
+  }
+  
+  .category-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .input-search, 
+  .select-status {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    width: 250px;
+    margin-right: 10px;
+  }
+  
+  .btn-search, 
+  .btn-add {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .btn-add {
+    background-color: #007bff;
+  }
+  
+  .btn-search:hover, 
+  .btn-add:hover {
+    background-color: #218838;
+  }
+  
+  .btn-add:hover {
+    background-color: #0056b3;
+  }
+  
+  .category-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .category-table th, 
+  .category-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .category-table th {
+    background-color: #007bff;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .category-table tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .category-img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  
+  .status-active {
+    color: #28a745;
+    font-weight: bold;
+  }
+  
+  .status-inactive {
+    color: #dc3545;
+    font-weight: bold;
+  }
+  .paginations {
+    display: flex;
+    justify-content: center; /* Căn giữa */
+    margin: 20px 0; /* Khoảng cách margin phía trên và dưới */
+  }
+  
+  .btn-group {
+    display: flex;
+  }
+  
+  #radioBtn .btn {
+    padding: 10px 20px; /* Tăng kích thước nút */
+    font-size: 18px; /* Tăng kích thước chữ */
+    margin: 0 5px; /* Thêm khoảng cách giữa các nút */
+  }
+  
+  #radioBtn .notActive {
+    background-color: #ccc; /* Màu nền cho nút không kích hoạt */
+    border-color: #bbb; /* Viền cho nút không kích hoạt */
+  }
+  
+  #radioBtn .Active {
+    background-color: #007bff; /* Màu nền cho nút kích hoạt */
+    border-color: #007bff; /* Viền cho nút kích hoạt */
+    color: #fff; /* Màu chữ cho nút kích hoạt */
+  }
+  .refresh-user-button{
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  .refresh-user-button{
+    background-color: #0069d9;
+  }

@@ -1,0 +1,54 @@
+<head>
+    <link rel="stylesheet" href="form-user.component.css">
+</head>
+
+<div class="overlay" *ngIf="isVisible" (click)="closeForm()"></div>
+<div class="form-container" *ngIf="isVisible">
+  <div class="form-content">
+    <h2>{{ isEditing ? 'Chỉnh sửa người dùng' : 'Thêm người dùng' }}</h2>
+
+    <form (ngSubmit)="onSubmit()" [formGroup]="formUser">
+      <label for="name">Username</label>
+      <input type="text" id="name" [(ngModel)]="user.username" name="name" required formControlName="username">
+      <div *ngIf="formUser.get('username')?.invalid && formUser.get('username')?.touched">
+        <div *ngIf="formUser.get('username')?.errors?.['required']" class="text-danger">Username ko được để trống</div>
+        <div *ngIf="formUser.get('username')?.errors?.['minlength']" class="text-danger">Username ít nhứt 6 kí tự</div>
+        <!--<div *ngIf="formUser.get('username')?.errors?.['onlyLetters']" class="text-danger">Username chỉ có kí tự</div>
+        -->
+    </div>
+
+
+      <label for="email">Email</label>
+      <input type="email" id="email" [(ngModel)]="user.email" name="email" required formControlName="email">
+      <div 
+      *ngIf="formUser.get('email')?.invalid && formUser.get('email')?.touched" 
+      >
+          <div *ngIf="formUser.get('email')?.errors?.['required']" class="text-danger">Email
+              ko được để trống</div>
+          <div *ngIf="formUser.get('email')?.errors?.['email']" class="text-danger">Email
+              không hợp lệ</div>
+
+      </div>
+
+      <label for="role">Vai trò</label>
+      <select id="role" [(ngModel)]="user.role" name="role" formControlName="role">
+        <option value="admin">Admin</option>
+        <option value="editor">Editor</option>
+        <option value="viewer">Viewer</option>
+      </select>
+      <label for="status">Trạng thái</label>
+      <div>
+        <label>
+            <input type="radio" [(ngModel)]="user.status"  name="status" formControlName="status" [value]="1">
+            Kích hoạt
+        </label>
+        <label>
+            <input type="radio" [(ngModel)]="user.status"  name="status" formControlName="status" [value]="0">
+            Khóa
+        </label>
+    </div>
+      <button type="submit" [disabled]="formUser.invalid" (click)="checkForm()">{{ isEditing ? 'Lưu' : 'Thêm' }}</button>
+      <button type="button" (click)="closeForm()" >Hủy</button>
+    </form>
+  </div>
+</div>

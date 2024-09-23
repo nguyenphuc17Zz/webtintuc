@@ -1,0 +1,44 @@
+<head>
+    <link rel="stylesheet" href="form-tag.component.css">
+</head>
+<div class="form-overlay" *ngIf="isVisible">
+    <div class="form-container">
+        <div class="form-header">
+            <h2>{{ isEditing ? 'Chỉnh sửa tag' : 'Thêm tag' }}</h2>
+            <button class="close-btn" (click)="closeForm()">X</button>
+        </div>
+  
+        <form [formGroup]="formTag" (ngSubmit)="onSubmit()">
+            <div class="form-body">
+                <!-- Tên tag -->
+                <div class="form-group">
+                    <label for="tagName">Tên tag</label>
+                    <input type="text" id="tagName" formControlName="tag_name" placeholder="Nhập tên tag" required>
+                    <div *ngIf="formTag.get('tag_name')?.invalid && formTag.get('tag_name')?.touched">
+                        <div *ngIf="formTag.get('tag_name')?.errors?.['required']" class="text-danger">Tên tag không được để trống</div>
+                    </div>
+                </div>
+  
+                
+  
+                <!-- Trạng thái -->
+                <div class="form-group">
+                    <label>Trạng thái</label>
+                    <div class="status-options">
+                        <label>
+                            <input type="radio" formControlName="status" [value]="true"> Kích hoạt
+                        </label>
+                        <label>
+                            <input type="radio" formControlName="status" [value]="false"> Khóa
+                        </label>
+                    </div>
+                </div>
+  
+                <!-- Nút submit -->
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">{{ isEditing ? 'Cập nhật' : 'Thêm mới' }}</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

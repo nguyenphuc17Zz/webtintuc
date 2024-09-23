@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Form</title>
+    <link rel="stylesheet" href="edit-profile.component.css">
+</head>
+<body>
+    <div class="form-container">
+        <form action="#"  [formGroup]="formEdit" (ngSubmit)="onEdit()" >
+            <h2>Thông tin </h2>
+
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username"  readonly formControlName="username">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" placeholder="Enter your email" formControlName="email">
+                <div *ngIf="formEdit.get('email')?.invalid && formEdit.get('email')?.touched">
+                    <div *ngIf="formEdit.get('email')?.errors?.['required']" class="text-danger">
+                        Email
+                        ko được để trống</div>
+                    <div *ngIf="formEdit.get('email')?.errors?.['email']" class="text-danger">
+                        Email
+                        không hợp lệ</div>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Enter your password" formControlName="password" >
+                <div
+                *ngIf="formEdit.get('password')?.invalid && formEdit.get('password')?.touched">
+                <div *ngIf="formEdit.get('password')?.errors?.['minlength']"
+                    class="text-danger">Password ít nhứt 3 kí tự</div>
+                <div *ngIf="formEdit.get('password')?.errors?.['required']"
+                    class="text-danger">Password ko được để trống</div>
+
+            </div>
+            </div>
+
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <input type="text" id="role"  readonly formControlName="role" >
+            </div>
+            <div class="form-group">
+                <button type="submit" [disabled]="formEdit.invalid">Submit</button>
+              </div>
+        </form>
+        <a routerLink="/admin/dashboard" style="cursor: pointer;">Trở về</a>
+    </div>
+</body>
+</html>

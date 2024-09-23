@@ -1,0 +1,62 @@
+<head>
+    <link rel="stylesheet" href="tag.component.css">
+</head>
+<app-layout>
+  <app-form-tag 
+  [isVisible]="isVisible" [isEditing]="isEditing" (close)="handleClose()"
+  [tag]="tagTemp"
+  >
+  </app-form-tag>
+
+  <div class="tag-container">
+    <div class="tag-header">
+      <input type="text" id="searchName" placeholder="Tìm kiếm theo tên tag..." class="input-search" [(ngModel)]="filterObj.Name">
+          <select id="statusFilter" class="select-status" [(ngModel)]="filterObj.Status">
+            <option value="all">Tất cả trạng thái</option>
+            <option value="1">Kích hoạt</option>
+            <option value="0">Khóa</option>
+          </select>
+      <button class="btn-search" (click)="onSearch()">Tìm kiếm</button>
+      <button class="btn-add" (click)="openForm(false, tagTemp)">Thêm tag</button>
+      <div class="col-3">
+        <button class="refresh-tag-button" (click)="refresh()">Làm mới</button>
+      </div>
+    </div>
+    <select name="" id="" [(ngModel)]="filterObj.PageSize" (change)="onChange1($event)">
+      <option value="5">5</option>
+      <option value="10">10</option>
+      <option value="20">20</option>
+  </select>
+    <table class="tag-table">
+      <thead>
+        <tr>
+          <th (click)="onIdSort()" style="cursor: pointer;">ID</th>
+          <th (click)="onNameSort()" style="cursor: pointer;">Tên tag</th>
+          <th (click)="onStatusSort()" style="cursor: pointer;">Trạng thái</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (tag of tagInPageNumber; track $index) {
+          <tr (click)="openForm(true, tag)" style="cursor: pointer;">
+            <td>{{tag.tag_id}}</td>
+            <td>{{tag.tag_name}}</td>
+            @if (tag.status) {
+              <td class="status-active">Kích hoạt</td>
+            } @else {
+              <td class="status-inactive">Khóa</td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+    <div class="paginations">
+      <div>
+        <div class="btn-group" id="radioBtn">
+          <a class="btn btn-primary btn-sm notActive" (click)="onPrevious()"><</a>
+          <a class="btn btn-primary btn-sm Active">{{filterObj.PageNumber}}</a>
+          <a class="btn btn-primary btn-sm notActive" (click)="onNext()">></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-layout>

@@ -1,0 +1,107 @@
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylish Table</title>
+    <link rel="stylesheet" href="user.component.css">
+</head>
+<app-layout>
+    <app-form-user [isVisible]="isFormVisible" [isEditing]="isEditing" [user]="userTemp"   (close)="handleClose()">
+        >
+
+
+    </app-form-user>
+    <body>
+        <div class="row">
+            <div class="col-3">
+                <label for="">Name
+                    <input type="text" class="form-control" placeholder="Search by Name" [(ngModel)]="filterObj.Name">
+
+                </label>
+            </div>
+            <div class="col-3">
+                <label for="">Email
+                    <input type="text" class="form-control" placeholder="Search by Email" [(ngModel)]="filterObj.Email">
+
+
+                </label>
+            </div>
+            <div class="col-3"><label for="">
+                Role
+                <select name="" id="" [(ngModel)]="filterObj.Role">
+                    <option value=""></option>
+                    <option value="admin">Admin</option>
+                    <option value="editor">Editor</option>
+                    <option value="viewer">Viewer</option>
+                </select>
+
+            </label>
+            </div>
+            <div class="col-3">
+                <button class="btn-search" (click)="clickBtn()">Search</button>
+            </div>
+            <div class="col-3">
+                <button class="add-user-button" (click)="openForm(false,userTempAdd)">Thêm người dùng</button>
+            </div>
+            <div class="col-3">
+                <button class="refresh-user-button" (click)="refresh()">Làm mới</button>
+            </div>
+
+        </div>
+        <div class="data_table_length">
+            <label for="">Size
+                <select [(ngModel)]="filterObj.PageSize" (change)="setDataPhanTrang(filterObj.PageNumber)" (change)="onChange1($event)">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                </select>
+            </label>
+        </div>
+        <div class="table-container">
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th style="cursor: pointer;" (click)="onSortId()">ID</th>
+                        <th style="cursor: pointer;" (click)="onSortName()">Tên</th>
+                        <th style="cursor: pointer;" (click)="onSortEmail()">Email</th>
+                        <th>Vai trò</th>
+                        <th style="cursor: pointer;" (click)="onSortTrangThai()">Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (user of userInPageNumber; track $index) {
+                        
+                        <tr (click)="openForm(true,user)">
+                            <td>{{user.user_id}}</td>
+                            <td>{{user.username}}</td>
+                            <td>{{user.email}}</td>
+                            <td>{{user.role}}</td>
+                            @if (user.status) {
+                                <td class="active">Hoạt động</td>
+                                
+                            }@else{
+                                <td class="inactive">Bị khóa</td>
+                            }
+                            
+                        </tr>
+                    }
+                    
+                    
+                </tbody>
+            </table>
+            
+        </div>
+        <div class="paginations">
+            <div>
+                <div class="btn-group" id="radioBtn">
+                    <a class="btn btn-primary btn-sm notActive" (click)="onPrevious()" ><</a>
+                    <a class="btn btn-primary btn-sm Active"  >{{filterObj.PageNumber}}</a>
+                    <a class="btn btn-primary btn-sm notActive" (click)="onNext()" >></a>
+
+                </div>
+            </div>
+        </div>
+    </body>
+</app-layout>
+
+

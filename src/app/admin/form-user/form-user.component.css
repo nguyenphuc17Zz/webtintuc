@@ -1,0 +1,63 @@
+/* Overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+  
+  /* Form Container */
+  .form-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 400px;
+  }
+  
+  /* Form Content */
+  .form-content h2 {
+    margin-bottom: 20px;
+  }
+  
+  .form-content form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-content form label {
+    margin: 10px 0 5px;
+  }
+  
+  .form-content form input,
+  .form-content form select {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+  }
+  
+  .form-content form button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .form-content form button[type="submit"] {
+    background-color: #009879;
+    color: white;
+  }
+  
+  .form-content form button[type="button"] {
+    background-color: red;
+    color: white;
+  }

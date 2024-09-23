@@ -1,0 +1,78 @@
+<head>
+    <link rel="stylesheet" href="category.component.css">
+
+</head>
+<app-layout>
+  <app-form-category 
+  [isVisible]="isVisible" [isEditing]="isEditing" (close)="handleClose()"
+  [category]="categoryTemp"
+  >
+
+  </app-form-category>
+
+
+    <div class="category-container">
+        <div class="category-header">
+          <input type="text" id="searchName" placeholder="Tìm kiếm theo tên thể loại..." class="input-search" [(ngModel)]="filterObj.Name">
+          <select id="statusFilter" class="select-status" [(ngModel)]="filterObj.Status">
+            <option value="all">Tất cả trạng thái</option>
+            <option value="1">Kích hoạt</option>
+            <option value="0">Khóa</option>
+          </select>
+          <button class="btn-search" (click)="onSearch()">Tìm kiếm</button>
+          <button class="btn-add" (click)="openForm(false,categoryTemp)">Thêm thể loại</button>
+          <div class="col-3">
+            <button class="refresh-user-button" (click)="refresh()">Làm mới</button>
+        </div>
+        </div>
+        <select name="" id="" [(ngModel)]="filterObj.PageSize" (change)="onChange1($event)">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+        </select>
+        <table class="category-table">
+          <thead>
+            <tr>
+              <th (click)="onIdSort()" style="cursor: pointer;">ID</th>
+              <th (click)="onTenSort()" style="cursor: pointer;">Tên thể loại</th>
+              <th >Mô tả</th>
+              <th>Ảnh</th>
+              <th (click)="onStatusSort()" style="cursor: pointer;">Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!---->
+            @for (category of cateInPageNumber; track $index) {
+                <tr (click)="openForm(true,category)" style="cursor: pointer;">
+                    <td>{{category.category_id}}</td>
+                    <td>{{category.category_name}}</td>
+                    <td>{{category.description}}</td>
+                    <img [src]="'http://localhost:3000/img_category/' + category.image_cate" alt="Category Image" class="category-img">
+                    @if (category.status) {
+                        <td class="status-active">Kích hoạt</td>
+                    }@else {
+                        <td class="status-inactive">Khóa</td>
+
+                    }
+                    
+                  </tr>
+
+            }
+            
+            
+            <!-- Các hàng dữ liệu khác -->
+          </tbody>
+        </table>
+        <div class="paginations">
+            <div>
+                <div class="btn-group" id="radioBtn">
+                    <a class="btn btn-primary btn-sm notActive" (click)="onPrevious()" ><</a>
+                    <a class="btn btn-primary btn-sm Active"  >{{filterObj.PageNumber}}</a>
+                    <a class="btn btn-primary btn-sm notActive" (click)="onNext()" >></a>
+    
+                </div>
+            </div>
+        </div>
+      </div>
+      
+</app-layout>

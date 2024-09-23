@@ -1,0 +1,72 @@
+<head> 
+    <link rel="stylesheet" href="./form-article.component.css">
+</head>
+<app-layout>
+    <div class="form-container">
+        <h2 class="form-title">Create New Article</h2>
+        <form class="article-form" [formGroup]="formArticle" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" placeholder="Enter article title" formControlName="title" />
+            <div *ngIf="formArticle.get('title')?.invalid && formArticle.get('title')?.touched">
+                <div *ngIf="formArticle.get('title')?.errors?.['required']" class="text-danger">Title ko được để trống</div>
+            </div>
+          </div>
+      
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" formControlName="category">
+              @for (category of categories; track $index) {
+                <option value="{{category.category_id}}">{{category.category_name}}</option>
+              }
+            
+            </select>
+            <div *ngIf="formArticle.get('category')?.invalid && formArticle.get('category')?.touched">
+                <div *ngIf="formArticle.get('category')?.errors?.['required']" class="text-danger">Category ko được để trống</div>
+            </div>
+            <label for="tag">Tag</label>
+            <select id="tag" (change)="changeTag($event)">
+              <option value="" >Select tag</option>
+                @for (tag of tags; track $index) {
+                    <option value="{{tag.tag_id}}">{{tag.tag_name}}</option>
+                }
+            </select>
+            <label for="">  Tag selected </label>
+            <textarea id="textarea-tagselected" name="tags" placeholder="Tag đã chọn" [value]="selectedTags" readonly></textarea>
+            <button id="refresh-tag-button" type="button" (click)="refreshTags()">Refresh</button>
+
+          </div>
+      
+          <div class="form-group">
+            <label for="content">Content</label>
+            <angular-editor  placeholder="Text here" [config]="config" formControlName="contentText"></angular-editor>
+            <div *ngIf="formArticle.get('contentText')?.invalid && formArticle.get('contentText')?.touched">
+                <div *ngIf="formArticle.get('contentText')?.errors?.['required']" class="text-danger">Content ko được để trống</div>
+            </div>
+        </div>
+      
+          <div class="form-group">
+            <label for="thumbnail_url">Thumbnail URL</label>
+            <input type="file" id="thumbnail_url" (change)="onFileSelected($event)" />
+            <img id="thumbnail_preview" src="" alt="Preview" *ngIf="imgThumbnail"/>
+          </div>
+      
+          <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" formControlName="status">
+              <option value="nhap">Nháp</option>
+              <option value="choduyet">Đăng ký duyệt</option>
+            </select>
+            <div *ngIf="formArticle.get('status')?.invalid && formArticle.get('status')?.touched">
+                <div *ngIf="formArticle.get('status')?.errors?.['required']" class="text-danger">Status ko được để trống</div>
+            </div>
+          </div>
+      
+          <div class="form-group">
+            <button type="submit" [disabled]="formArticle.invalid">Submit</button>
+          </div>
+        </form>
+        <button id="refresh-tag-button"  (click)="refresh()">Refresh</button>
+      </div>
+      
+</app-layout>
