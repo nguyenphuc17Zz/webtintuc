@@ -1,24 +1,31 @@
-import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, Input, OnInit, Output, OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
+import { LayoutComponent } from '../layout/layout.component';
+import { RouterModule, Router } from '@angular/router';
+import { category, user, tag } from '../../interface/user.interface';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormUserComponent } from '../form-user/form-user.component';
 import { categoryService } from '../../services/category.service';
+import { FormCategoryComponent } from '../form-category/form-category.component';
+import { CommonModule } from '@angular/common';
+import { AngularEditorModule, AngularEditorConfig } from '@kolkov/angular-editor';
 import { TagService } from '../../services/tag.service';
 import { articleService } from '../../services/article.service';
-import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
-import { AngularEditorModule, AngularEditorConfig } from '@kolkov/angular-editor';
-import { LayoutComponent } from '../layout/layout.component';
 @Component({
-  selector: 'app-form-article',
+  selector: 'app-form-update-article',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterModule, AngularEditorModule, LayoutComponent],
-  templateUrl: './form-article.component.html',
-  styleUrl: './form-article.component.css'
+  imports: [ReactiveFormsModule, CommonModule, RouterModule, AngularEditorModule, FormsModule],
+  templateUrl: './form-update-article.component.html',
+  styleUrl: './form-update-article.component.css'
 })
-export class FormArticleComponent implements OnInit {
-  imgThumbnail !: any;
-  formArticle!: FormGroup;
-  tags: any[] = [];
+export class FormUpdateArticleComponent {
+  @Input() isVisible: boolean = false;
+  @Input() id_article = -1;
+  @Output() close = new EventEmitter<void>();
+  id: number = -1;
+  formUpdate!: FormGroup;
   categories: any[] = [];
+  tags: any[] = [];
+  imgThumbnail: any;
   tagsNow: { tag_id: number; tag_name: string }[] = [];
   selectedTags: string = ''; // Biến để lưu nội dung cho textarea
   config: AngularEditorConfig = {
@@ -30,77 +37,125 @@ export class FormArticleComponent implements OnInit {
     translate: 'no',
     defaultParagraphSeparator: 'p',
     defaultFontName: 'Arial',
-
   };
+  baiVietCurrent: any;
+  tagCurrent: any;
   constructor(private articleService: articleService, private tagService: TagService
     , private categoryService: categoryService, private router: Router) {
 
-    this.formArticle = new FormGroup({
+    this.formUpdate = new FormGroup({
       title: new FormControl('', [Validators.required]),
       contentText: new FormControl('', [Validators.required]),
-      status: new FormControl('', [Validators.required]),
       category: new FormControl('', [Validators.required])
     });
 
+
+  }
+  getArticleById(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.articleService.getArticleCuTheById(id).subscribe({
+        next: (data: any) => {
+          resolve(data);
+        },
+        error: (err) => {
+          reject(err); // Thêm reject nếu có lỗi
+        }
+      });
+    });
+  }
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
+    if (changes['isVisible'] && changes['isVisible'].currentValue) {
+      this.tagsNow = [];
+      let baivietId = await this.getArticleById(this.id_article);
+      this.id = this.id_article;
+      this.imgThumbnail = null;
+      this.tags = await this.getAllTags();
+      this.categories = await this.getAllCategories();
+      let b = await this.getArticleTagById(this.id_article);
+      this.tagCurrent = b;
+      for (let i = 0; i < b.length; i++) {
+        for (let j = 0; j < this.tags.length; j++) {
+          if (b[i].tag_id === this.tags[j].tag_id) {
+            const obj = { tag_id: b[i].tag_id, tag_name: this.tags[j].tag_name }; // Khởi tạo đối tượng
+            this.tagsNow.push(obj);
+            break;
+          }
+        }
+      }
+      this.updateSelectedTags();
+      // Khởi tạo lại form với giá trị mặc định từ userTemp
+      let a = baivietId[0];
+      this.baiVietCurrent = baivietId[0];
+      this.formUpdate = new FormGroup({
+        title: new FormControl(a.title, [Validators.required]),
+        contentText: new FormControl(a.content, [Validators.required]),
+        category: new FormControl(a.category_id, [Validators.required])
+      });
+      let img = document.getElementById('thumbnail_preview') as HTMLImageElement;
+      img.src = `http://localhost:3000/img_thumbnail/${a.thumbnail_url}`;
+    }
   }
 
 
   async onSubmit() {
-    if (!this.imgThumbnail) {
-      alert('Bạn chưa chọn thumbnail');
-      return;
-    }
     if (this.tagsNow.length === 0) {
       alert('Bạn chưa chọn tag nào');
       return;
     }
-    let title = this.formArticle.value['title'];
-    let status = this.formArticle.value['status'];
-    let category = this.formArticle.value['category'];
-    let idEditor = Number(localStorage.getItem('id'));
+    let title = this.formUpdate.value['title'].trim();
+    let category = this.formUpdate.value['category'];
+    let content = this.formUpdate.value['contentText'].trim();
+    let thumbnail_name = this.baiVietCurrent.thumbnail_url;
     let tag = [];
     for (let i = 0; i < this.tagsNow.length; i++) {
       tag.push(this.tagsNow[i].tag_id);
     }
-
-
-
-    const [newName, success] = await this.generateImgThumbnail();
-    if (success) {
-      let isImgContentSuccess = await this.handleImages(this.formArticle.value['contentText']);
-      let contentText = this.formArticle.value['contentText'];
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = contentText; // Giả sử `content` chứa HTML
-      let contentFinal = tempDiv.innerHTML;
-      if (isImgContentSuccess) {
-        this.articleService.addArticle(title, contentFinal, idEditor, category, status, newName, tag).
-          subscribe({
-            next: (data: any) => {
-              alert(data.message);
-              if (data.status === 1) {
-                this.refresh();
-              } else {
-                alert('Thêm bài viết thất bại');
-              }
-            }
-          })
-      } else {
-        alert('Upload hình ảnh thất bại');
+    if (this.tagCurrent.length === this.tagsNow.length) {
+      let isExist = true;
+      for (let i = 0; i < this.tagCurrent.length; i++) {
+        if (!this.tagCurrent.some((tag: any) => (Number(tag.tag_id)) === Number(this.tagsNow[i].tag_id))) {
+          isExist = false;
+        }
       }
-
-    } else {
-      alert('Lỗi khi tạo ảnh thumbnail');
-      return;
+      if (isExist) {
+        if (title === this.baiVietCurrent.title.trim() && content === this.baiVietCurrent.content.trim()
+          && category === this.baiVietCurrent.category_id && this.imgThumbnail === null) {
+          alert('Không có gì thay đổi');
+          return;
+        }
+      }
     }
+    if (this.imgThumbnail) {
+      const [newName, success] = await this.generateImgThumbnail();
+      if (success) {
+        thumbnail_name = newName;
+      } else {
+        alert('Lỗi khi tạo ảnh thumbnail');
+        return;
+      }
+    }
+      let a = await this.handleImages(this.baiVietCurrent.content, content);
+      if (a) {
+        content = this.formUpdate.value['contentText'].trim();
+        this.articleService.updateArticle(this.id_article, title, content, category, thumbnail_name, tag
+        ).subscribe({
+          next: (data: any) => {
+            alert(data.message);
+            if (data.status === 1) {
+              this.close.emit(); // Emit close event
+            }
+          }
+        })
+      }else{
+        alert('Fail buoc nay');
+      }
+    
 
   }
 
 
-  ngOnInit() {
-    this.getAllTags();
-    this.getAllCategories();
-  }
- 
+
+
   changeTag(event: any) {
     let selectedTagId = Number(event.target.value); // Lấy giá trị `tag_id` đã chọn và chuyển đổi thành số
     let name: string = ''; // Khai báo biến `name` với kiểu là string
@@ -123,18 +178,31 @@ export class FormArticleComponent implements OnInit {
       this.updateSelectedTags(); // Cập nhật lại nội dung trong textarea
     }
   }
-  getAllTags() {
-    this.tagService.getAllTags().subscribe({
-      next: (data: any) => {
-        this.tags = data;
-      }
+  getAllTags(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.tagService.getAllTags().subscribe({
+        next: (data: any) => {
+          resolve(data);
+        }
+      })
     })
   }
-  getAllCategories() {
-    this.categoryService.getAllCategories().subscribe({
-      next: (data: any) => {
-        this.categories = data;
-      }
+  getAllCategories(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.categoryService.getAllCategories().subscribe({
+        next: (data: any) => {
+          resolve(data);
+        }
+      })
+    })
+  }
+  getArticleTagById(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.articleService.getArticleeTagById(id).subscribe({
+        next: (data: any) => {
+          resolve(data);
+        }
+      })
     })
   }
   // Làm mới tất cả tags
@@ -144,11 +212,13 @@ export class FormArticleComponent implements OnInit {
 
   }
   refresh() {
+    /*
     (document.getElementById('thumbnail_url') as HTMLInputElement).value = '';
     this.imgThumbnail = null;
     this.formArticle.reset();
     this.tagsNow = [];
     this.updateSelectedTags(); // Cập nhật lại nội dung trong textarea
+  */
   }
   // Cập nhật nội dung cho textarea
   updateSelectedTags() {
@@ -233,20 +303,20 @@ export class FormArticleComponent implements OnInit {
             resolve(result); // Nếu không có dữ liệu, trả về mảng rỗng
             return;
           }
-  
+
           // Sử dụng vòng lặp for thông thường
           for (let j = 0; j < data.length; j++) {
             const article = data[j]; // Lấy bài viết
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = article.content; // Giả sử `content` chứa HTML
-  
+
             const images = tempDiv.getElementsByTagName('img');
             // Lặp qua các ảnh và lưu vào mảng
             for (let i = 0; i < images.length; i++) {
               result.push(images[i].src); // Lưu đường dẫn ảnh vào mảng
             }
           }
-  
+
           resolve(result); // Trả về kết quả cuối cùng
         },
         error: (err) => {
@@ -256,47 +326,56 @@ export class FormArticleComponent implements OnInit {
     });
   }
 
-  async handleImages(content: string): Promise<boolean> {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = content;
+  async handleImages(contentOld: string, contentNew: string): Promise<boolean> {
+    const tempDivOld = document.createElement('div');
+    tempDivOld.innerHTML = contentOld;
+    const imagesOld = tempDivOld.getElementsByTagName('img');
 
-    const images = tempDiv.getElementsByTagName('img');
-
-    if (images.length === 0) {
-      console.log('No images found in content');
-      return true; // Trả lại content ban đầu nếu không có hình ảnh
-    }
+    const tempDivNew = document.createElement('div');
+    tempDivNew.innerHTML = contentNew;
+    const imagesNew = tempDivNew.getElementsByTagName('img'); // Sử dụng tempDivNew
 
     let allImageName = await this.getAllImageName();
 
-    for (let i = 0; i < images.length; i++) {
-      const imgSrc = images[i].src; // Lấy đường dẫn hình ảnh
-      let imgName = '';
-      let isCondition = false;
-
-      while (!isCondition) {
-        imgName = this.generateRandomNumberString(9);
-        if (!allImageName.includes(imgName)) {
-          allImageName.push(imgName);
-          isCondition = true;
-        }
-      }
-
-      images[i].src = `http://localhost:3000/img_article/${imgName}`;
-
-      const imgBlob = await this.urlToBlob(imgSrc);
-      let form = new FormData();
-      form.append('file', imgBlob);
-      form.append('tenFile', imgName);
-
-      let sendImgArtical = await this.sendImgArticalToBackend(form);
-      if (!sendImgArtical) {
-        alert('Có lỗi xảy ra khi thêm hình ảnh');
-        return false; // Trả lại content ban đầu nếu có lỗi
+    if (imagesOld.length === 0) {
+      console.log('No images found in content');
+      return true; // Trả lại content ban đầu nếu không có hình ảnh
+    }
+    let arrImagesOld = [];
+    if (imagesOld.length > 0) {
+      for (let i = 0; i < imagesOld.length; i++) {
+        arrImagesOld.push(imagesOld[i].src);
       }
     }
+    for (let i = 0; i < imagesNew.length; i++) {
+      if (!arrImagesOld.includes(imagesNew[i].src)) {
+        const imgSrc = imagesNew[i].src; // Lấy đường dẫn hình ảnh
+        let imgName = '';
+        let isCondition = false;
 
-    this.formArticle.patchValue({ contentText: tempDiv.innerHTML });
+        while (!isCondition) {
+          imgName = this.generateRandomNumberString(9);
+          if (!allImageName.includes(imgName)) {
+            allImageName.push(imgName);
+            isCondition = true;
+          }
+        }
+
+        imagesNew[i].src = `http://localhost:3000/img_article/${imgName}`;
+
+        const imgBlob = await this.urlToBlob(imgSrc);
+        let form = new FormData();
+        form.append('file', imgBlob);
+        form.append('tenFile', imgName);
+
+        let sendImgArtical = await this.sendImgArticalToBackend(form);
+        if (!sendImgArtical) {
+          alert('Có lỗi xảy ra khi thêm hình ảnh');
+          return false; // Trả lại content ban đầu nếu có lỗi
+        }
+      }
+    }
+    this.formUpdate.patchValue({ contentText: tempDivNew.innerHTML });
     return true;
   }
 
@@ -354,5 +433,7 @@ export class FormArticleComponent implements OnInit {
       })
     })
   }
-
-}
+  closeForm() {
+    this.close.emit(); // Emit close event
+  }
+} 

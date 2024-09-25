@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Trang web của bạn</title>
+  <link rel="stylesheet" href="header.component.css">
+  <link
+  href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
+  rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+</head>
+<body>
+    <header>
+        <div class="header-left">
+          <img src="../../../assets/img/depositphotos_326054804-stock-illustration-creative-modern-letter-news-clock.webp" alt="Logo" class="logo" (click)="goTrangchu()" style="cursor: pointer;">
+          <h1 class="site-name" (click)="goTrangchu()" style="cursor: pointer;">WEB TIN TỨC</h1>
+        </div>
+        <div class="header-search">
+          <input type="text" placeholder="Tìm kiếm..." class="search-input">
+          <button class="search-button">Tìm</button>
+        </div>
+        <nav class="navbar">
+          <ul>
+            <li><a routerLink="/trangchu">Trang chủ</a></li>
+            <li class="dropdown">
+              <a href="#">Tags</a>
+              <div class="dropdown-content">
+                <a *ngFor="let tag of tags; let i = index" href="#" [hidden]="i >= 10">{{tag.tag_name}}</a>
+              </div>
+            </li>
+            <li class="dropdown">
+              <a href="#">Category</a>
+              <div class="dropdown-content">
+                <a *ngFor="let category of categories; let i = index" href="#" [hidden]="i >= 10">{{category.category_name}}</a>
+              </div>
+            </li>
+          </ul>
+        </nav>
+        <div class="header-right">
+          @if(!id){
+            <a routerLink="/dangnhap" style="cursor: pointer;" >
+              <span class="material-icons-outlined">login</span>Đăng nhập
+          </a>
+          }@else{
+            <span>Hello {{user.username}}</span>
+            <a routerLink="/dangnhap" (click)="deleteLs()" >
+              <span class="material-icons-outlined">logout</span> Log out
+          </a>
+          }
+            
+        </div>
+      </header>
+      
+      </body>
+</html>

@@ -1,0 +1,60 @@
+<link rel="stylesheet" href="trangchu.component.css">
+<app-header></app-header>
+<div class="container-news">
+    <!-- Phần Tag bên trái -->
+    <div class="left-tags">
+      <h3>Tags</h3>
+      <div class="tag-list">
+        <span class="tag" 
+        *ngFor="let tag of tags | slice:0:9; let i = index" 
+        style="cursor: pointer;" 
+        (click)="goToSearchTagCate('tag', tag.tag_id)">
+    #{{ tag.tag_name }}
+  </span>
+      </div>
+    </div>
+    
+    <!-- Phần Tin tức ở giữa -->
+    <div class="center-news">
+      <div class="search-bar">
+        <input type="text" placeholder="Tìm kiếm tin tức..." [(ngModel)]="searchQuery" />
+        <button (click)="search()">Tìm kiếm</button>
+      </div>
+      @for (article of articleInPageNumber; track $index) {
+        <div class="news-item" style="cursor: pointer;" (click)="goToChitiet(article.article_id,article.title)">
+          <img [src]="'http://localhost:3000/img_thumbnail/' + article.thumbnail_url" alt="thumbnail">
+          <div class="news-info">
+            <h2>{{article.title}}</h2>
+            <p class="meta">{{article.published_at}} | Thể loại: {{article.category_name}}</p>
+          </div>
+        </div>
+    
+      }
+      
+    
+      <!-- Thêm các tin tức khác tương tự -->
+       <!-- Nút phân trang -->
+       <div class="paginations">
+        <div>
+            <div class="btn-group" id="radioBtn">
+                <a class="btn btn-primary btn-sm notActive" (click)="onPrevious()" ><</a>
+                <a class="btn btn-primary btn-sm Active"  >{{filterObj.PageNumber}}</a>
+                <a class="btn btn-primary btn-sm notActive" (click)="onNext()" >></a>
+
+            </div>
+        </div>
+    </div>
+    </div>
+  
+    <!-- Phần Thể loại bên phải -->
+    <div class="right-categories">
+      @for (cate of categories; track $index) {
+        <div class="category" style="cursor: pointer;" (click)="goToSearchTagCate('category', cate.category_id)">
+          
+          <img [src]="'http://localhost:3000/img_category/' + cate.image_cate" alt="category">
+          <span class="category-name">{{cate.category_name}}</span>
+        </div>
+      }
+    </div>
+  </div>
+  <app-footer></app-footer>

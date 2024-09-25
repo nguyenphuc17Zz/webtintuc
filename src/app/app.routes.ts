@@ -8,7 +8,10 @@ import { UserComponent } from './admin/user/user.component';
 import { CategoryComponent } from './admin/category/category.component';
 import { TagComponent } from './admin/tag/tag.component';
 import { FormArticleComponent } from './admin/form-article/form-article.component'
-import { ArticleComponent } from './admin/article/article.component';
+import { ArticleComponent } from './admin/article-editor/article.component';
+import { TrangchuComponent } from './end_user/trangchu/trangchu.component';
+import { ChitietbaivietComponent } from './end_user/chitietbaiviet/chitietbaiviet.component';
+import { ArticleListComponent } from './end_user/article-list/article-list.component';
 
 export const routes: Routes = [
     {
@@ -16,7 +19,10 @@ export const routes: Routes = [
         redirectTo: 'trangchu',
         pathMatch: 'full'
     },
-
+    {
+        path: 'trangchu',
+        component: TrangchuComponent
+    },
     {
         path: 'dangki',
         component: DangkiComponent
@@ -68,4 +74,13 @@ export const routes: Routes = [
         path: 'admin/article',
         component: ArticleComponent
     },
+    {
+        path: 'articles/:title',
+        component: ChitietbaivietComponent
+    },
+    {
+        path: 'articles/:type/:key',
+        component: ArticleListComponent
+    }
+    
 ];

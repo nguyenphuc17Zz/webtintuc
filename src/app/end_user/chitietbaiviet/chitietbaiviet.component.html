@@ -1,0 +1,43 @@
+<head>
+    <title>Trang chi tiết bài viết</title>
+    <link rel="stylesheet" href="chitietbaiviet.component.css">
+</head>
+<app-header></app-header>
+<div class="article-container" *ngIf="article && article.title">
+    <div class="article-header">
+        <span class="article-category" style="cursor: pointer;" (click)="goToSearchTagCate('category',article.category_id)">{{article.category_name}}</span>
+        <h1>{{article.title}}</h1>
+        <div class="article-author">
+            <p>{{article.tentacgia}} - {{article.published_at}}</p>
+        </div>
+    </div>
+    <div class="article-content" [innerHTML]="article.content"></div>
+
+    <div class="article-tags">
+        <ul>
+            <li *ngFor="let tag of tagsNow">
+                <a style="cursor: pointer;" (click)="goToSearchTagCate('tag', tag.tag_id)">{{ tag.tag_name }}</a>
+            </li>
+        </ul>
+    </div>
+    <!--
+        <div class="related-articles">
+            <h2>Bài viết liên quan</h2>
+            <div class="grid-container">
+                <div class="grid-item">
+                    <img src="thumbnail1.jpg" alt="Bài viết 1">
+                    <h3><a href="#">Bài viết liên quan 1</a></h3>
+                </div>
+                <div class="grid-item">
+                    <img src="thumbnail2.jpg" alt="Bài viết 2">
+                    <h3><a href="#">Bài viết liên quan 2</a></h3>
+                </div>
+                <div class="grid-item">
+                    <img src="thumbnail3.jpg" alt="Bài viết 3">
+                    <h3><a href="#">Bài viết liên quan 3</a></h3>
+                </div>
+            </div>
+        </div>
+    -->
+</div>
+<app-footer></app-footer>

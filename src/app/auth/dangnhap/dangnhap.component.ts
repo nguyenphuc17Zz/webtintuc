@@ -49,7 +49,7 @@ export class DangnhapComponent implements OnInit {
             if(data.user.role === 'admin' || data.user.role==='editor'){
               this.router.navigate(['/admin']);
             }else if(data.user.role === 'viewer'){
-
+              this.router.navigate(['/trangchu']);
             }else{
 
             }

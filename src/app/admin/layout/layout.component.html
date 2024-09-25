@@ -71,10 +71,10 @@
                         <span class="material-icons-outlined">tag</span> Tag
                     </a>
                 </li>
-                <li class="sidebar-list-item" *ngIf="role === 'admin' || role === 'editor'">
+                <li class="sidebar-list-item" *ngIf="role === 'editor'">
                     <a routerLink="/admin/article">
                       <span class="material-icons-outlined">article</span>
-                      {{ role === 'admin' ? 'Article' : 'MyArticle' }}
+                      MyArticle
                     </a>
                   </li>
                 <li class="sidebar-list-item" *ngIf="role==='editor'">

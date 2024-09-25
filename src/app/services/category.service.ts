@@ -36,4 +36,8 @@ export class categoryService {
     updateCategoryWithImage(id: number, category_name: string, description: string, image_cate: string, status: boolean) {
         return this.http.put(`${this.apiUrl}/category/updateImg/${id}`, { category_name, description, image_cate, status });
     }
+     // GET ALL CATEGORIES
+     getAllCategoriesUser(status:number): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/category/${status}`);
+    }
 }

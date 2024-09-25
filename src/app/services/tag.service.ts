@@ -19,13 +19,16 @@ export class TagService {
   }
 
   // ADD TAG
-  addTag(tag_name: string,  status: boolean) {
-    return this.http.post(`${this.apiUrl}/tag/add`, { tag_name,  status });
+  addTag(tag_name: string, status: boolean) {
+    return this.http.post(`${this.apiUrl}/tag/add`, { tag_name, status });
   }
 
   // UPDATE TAG (không có hình ảnh)
   updateTag(id: number, tag_name: string, status: boolean) {
     return this.http.put(`${this.apiUrl}/tag/update/${id}`, { tag_name, status });
   }
-
+  // GET ALL TAGS
+  getAllTagsUser(status:number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/tag/${status}`);
+  }
 }

@@ -1,0 +1,85 @@
+<head>
+    <link rel="stylesheet" href="article.component.css">
+</head>
+
+<app-layout>
+    <app-form-update-article [isVisible]="isVisible" (close)="handleClose()" [id_article]="idz" ></app-form-update-article>
+    <div class="my-article-container">
+        <h2>Danh sách bài viết</h2>
+        <div class="article-header">
+            <input type="text" id="searchTitle" placeholder="Tìm kiếm theo tiêu đề..." class="input-search"
+                [(ngModel)]="filterObj.Name">
+            <input type="text" id="searchTitle" placeholder="Tìm kiếm theo thể loại.." class="input-search"
+                [(ngModel)]="filterObj.CategoryName">
+            <select id="statusFilter" class="select-status" [(ngModel)]="filterObj.Status">
+                <option value="all">Tất cả trạng thái</option>
+                <option value="choduyet">Chờ duyệt</option>
+                <option value="nhap">Nháp</option>
+            </select>
+
+            <button class="btn-search" (click)="onSearch()">Tìm kiếm</button>
+            <button class="refresh-article-button" (click)="refresh()">Làm mới</button>
+        </div>
+        <select name="" id="" [(ngModel)]="filterObj.PageSize" (change)="onChange1($event)">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+        </select>
+        <table class="article-table">
+            <thead>
+                <tr>
+                    <th>Tiêu đề</th>
+                    <th>THỂ LOẠI</th>
+                    <th>Trạng thái</th>
+                    <th>Thumbnail</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr *ngFor="let article of articleInPageNumber" (click)="openForm($event)" [attr.data-id]="article.article_id" style="cursor: pointer;">
+                    <td>{{ article.title }}</td>
+                    <td>{{ article.category_name }}</td>
+                    <td>
+                        <span>
+                            {{
+                              article.article_status === 'choduyet' ? 'Chờ duyệt' :
+                              article.article_status === 'nhap' ? 'Nháp' :
+                              article.article_status === 'daduyet' ? 'Đã duyệt' : 
+                              article.article_status === 'bigo' ? 'Bị gỡ' : 
+                              ''
+                            }}
+                          </span>
+                          >
+                    </td>
+                    <td>
+                      <img [src]="'http://localhost:3000/img_thumbnail/' + article.thumbnail_url" alt="Thumbnail" class="article-img">
+                    </td>
+                    <td>
+                      <!-- Hiển thị nút thao tác chỉ khi trạng thái là nháp hoặc chờ duyệt -->
+                      <button *ngIf="article.article_status === 'choduyet' || article.article_status === 'nhap'"
+                        class="btn-toggle-status" [attr.data-id]="article.article_id"
+                        [attr.data-status]="article.article_status" [ngClass]="{
+                          'status-draft': article.article_status === 'choduyet',
+                          'status-pending': article.article_status !== 'choduyet'
+                        }" (click)="toggleStatus($event)">
+                        {{ article.article_status === 'choduyet' ? 'Nháp' : 'Chờ duyệt' }}
+                      </button>
+                    </td>
+                  </tr>
+                  
+            </tbody>
+        </table>
+        <div class="paginations">
+            <div>
+                <div class="btn-group" id="radioBtn">
+                    <a class="btn btn-primary btn-sm notActive" (click)="onPrevious()">
+                        <</a>
+                            <a class="btn btn-primary btn-sm Active">{{filterObj.PageNumber}}</a>
+                            <a class="btn btn-primary btn-sm notActive" (click)="onNext()">></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</app-layout>

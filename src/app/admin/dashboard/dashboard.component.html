@@ -1,65 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Admin Dashboard</title>
-
-    <!-- Montserrat Font -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
-
-    <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="dashboard.component.css">
 </head>
 <app-layout>
     
-    <main class="main-container">
-        
+    <div class="my-article-container">
+        <h2>Danh sách bài viết</h2>
+        <div class="article-header">
+            <input type="text" id="searchTitle" placeholder="Tìm kiếm theo tiêu đề..." class="input-search"
+                [(ngModel)]="filterObj.Name">
+            <input type="text" id="searchTitle" placeholder="Tìm kiếm theo thể loại.." class="input-search"
+                [(ngModel)]="filterObj.CategoryName">
+            <select id="statusFilter" class="select-status" [(ngModel)]="filterObj.Status">
+                <option value="all">Tất cả trạng thái</option>
+                <option value="choduyet">Chờ duyệt</option>
+                <option value="bigo">Bị gỡ</option>
+                <option value="daduyet">Đã duyệt</option>
+            </select>
 
-        <div class="main-cards">
-
-            <div class="card">
-                <div class="card-inner">
-                    <h3>PRODUCTS</h3>
-                    <span class="material-icons-outlined">inventory_2</span>
-                </div>
-                <h1>249</h1>
-            </div>
-
-            <div class="card">
-                <div class="card-inner">
-                    <h3>CATEGORIES</h3>
-                    <span class="material-icons-outlined">category</span>
-                </div>
-                <h1>25</h1>
-            </div>
-
-            <div class="card">
-                <div class="card-inner">
-                    <h3>CUSTOMERS</h3>
-                    <span class="material-icons-outlined">groups</span>
-                </div>
-                <h1>1500</h1>
-            </div>
-
-            <div class="card">
-                <div class="card-inner">
-                    <h3>ALERTS</h3>
-                    <span class="material-icons-outlined">notification_important</span>
-                </div>
-                <h1>56</h1>
-            </div>
-
+            <button class="btn-search" (click)="onSearch()">Tìm kiếm</button>
+            <button class="refresh-article-button" (click)="refresh()">Làm mới</button>
         </div>
+        <select name="" id="" [(ngModel)]="filterObj.PageSize" (change)="onChange1($event)">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+        </select>
+        <table class="article-table">
+            <thead>
+                <tr >
+                    <th (click)="sortTitle()" style="cursor: pointer;">Tiêu đề</th>
+                    <th (click)="sortCate()" style="cursor: pointer;">THỂ LOẠI</th>
+                    <th (click)="sortStatus()" style="cursor: pointer;">Trạng thái</th>
+                    <th>Thumbnail</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
 
+                <tr *ngFor="let article of articleInPageNumber"  [attr.data-id]="article.article_id" style="cursor: pointer;">
+                    <td>{{ article.title }}</td>
+                    <td>{{ article.category_name }}</td>
+                    <td>
+                        <span>
+                            {{
+                                article.article_status === 'choduyet' ? 'Chờ duyệt' :
+                                article.article_status === 'nhap' ? 'Nháp' :
+                                article.article_status === 'daduyet' ? 'Đã duyệt' : 
+                                article.article_status === 'bigo' ? 'Bị gỡ' : 
+                                ''
+                              }}                        </span>
+                    </td>
+                    <td>
+                        <img [src]="'http://localhost:3000/img_thumbnail/' + article.thumbnail_url" alt="Thumbnail"
+                            class="article-img">
+                    </td>
+                    <td>
+                        <div class="btn-group" *ngIf="article.article_status === 'choduyet'">
+                            <button class="btn-approve" [attr.data-id]="article.article_id" (click)="approveArticle($event)">
+                                Duyệt
+                            </button>
+                            <button class="btn-remove" [attr.data-id]="article.article_id" (click)="removeArticle($event)">
+                                Gỡ
+                            </button>
+                        </div>
+                        <div *ngIf="article.article_status === 'daduyet'">
+                            <button class="btn-remove" [attr.data-id]="article.article_id" (click)="removeArticle($event)">
+                                Gỡ
+                            </button>
+                        </div>
+                        <div *ngIf="article.article_status === 'bigo'">
+                            <button class="btn-approve" [attr.data-id]="article.article_id" (click)="approveArticle($event)">
+                                Duyệt lại
+                            </button>
+                        </div>
+                        
+                
+                    </td>
+                </tr>
 
-    </main>
+            </tbody>
+        </table>
+        <div class="paginations">
+            <div>
+                <div class="btn-group" id="radioBtn">
+                    <a class="btn btn-primary btn-sm notActive" (click)="onPrevious()">
+                        <</a>
+                            <a class="btn btn-primary btn-sm Active">{{filterObj.PageNumber}}</a>
+                            <a class="btn btn-primary btn-sm notActive" (click)="onNext()">></a>
 
+                </div>
+            </div>
+        </div>
+    </div>
 
 </app-layout>
