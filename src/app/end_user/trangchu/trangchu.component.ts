@@ -24,28 +24,28 @@ export class TrangchuComponent implements OnInit {
     "PageSize": 10
   }
   totalPages = 0;
-  articleInPageNumber : any []=[];
+  articleInPageNumber: any[] = [];
   calculateTotalPages() {
     this.totalPages = Math.ceil(this.articles.length / this.filterObj.PageSize);
   }
-  setDataPageNumber(page :number){
+  setDataPageNumber(page: number) {
     let start = (page - 1) * this.filterObj.PageSize;
-    let end = page * this.filterObj.PageSize;  
-    this.articleInPageNumber = this.articles.slice(start,end);
+    let end = page * this.filterObj.PageSize;
+    this.articleInPageNumber = this.articles.slice(start, end);
   }
-  onPrevious(){
-    if(Number(this.filterObj.PageNumber)===1){
-      this.filterObj.PageNumber=1;
-    }else{
-      this.filterObj.PageNumber-=1;
+  onPrevious() {
+    if (Number(this.filterObj.PageNumber) === 1) {
+      this.filterObj.PageNumber = 1;
+    } else {
+      this.filterObj.PageNumber -= 1;
     }
     this.setDataPageNumber(this.filterObj.PageNumber);
   }
-  onNext(){
-    if(Number(this.filterObj.PageNumber)===this.totalPages){
-      this.filterObj.PageNumber=this.totalPages;
-    }else{
-      this.filterObj.PageNumber+=1;
+  onNext() {
+    if (Number(this.filterObj.PageNumber) === this.totalPages) {
+      this.filterObj.PageNumber = this.totalPages;
+    } else {
+      this.filterObj.PageNumber += 1;
     }
     this.setDataPageNumber(this.filterObj.PageNumber);
   }
@@ -94,12 +94,12 @@ export class TrangchuComponent implements OnInit {
         });
         this.calculateTotalPages();
         this.setDataPageNumber(this.filterObj.PageNumber);
-       },
+      },
       error: (err) => {
         console.error('Error fetching articles:', err);
       }
     });
-   
+
   }
 
   formatDateTime(dateTime: string): string {
@@ -114,9 +114,12 @@ export class TrangchuComponent implements OnInit {
   }
   goToChitiet(id: number, title: string) {
 
-    this.router.navigate([`/articles/${title}`], { queryParams: { id } });
+    this.router.navigate([`/articlesdetail/${title}`], { queryParams: { id } });
   }
-  goToSearchTagCate(type:string,key:string){
-    this.router.navigate([`/articles/${type}/${key}`] , {queryParams:{type,key}});
+  goToSearchTagCate(type: string, key: string) {
+    if (type === 'search' && key.trim() === '') {
+      key = 'getallarticles';
+    }
+    this.router.navigate([`/articles/${type}/${key}`], { queryParams: { type, key } });
   }
 }

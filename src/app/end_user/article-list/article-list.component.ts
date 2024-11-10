@@ -84,7 +84,7 @@ export class ArticleListComponent {
       this.setUp(); // Gọi hàm setUp() nếu có logic riêng cho phần này
 
       // Đợi cho hàm setUpArticle() hoàn thành
-      await this.setUpArticle(this.type,this.key);
+      await this.setUpArticle(this.type, this.key);
       this.articles.forEach((article) => {
         article.published_at = this.formatDateTime(article.published_at);
       });
@@ -113,10 +113,13 @@ export class ArticleListComponent {
       } else if (type === 'search') {
         this.articleService.getAllArticles().subscribe({
           next: (data: any) => {
+            console.log(key);
             this.articles = data.result;
-            this.articles = this.articles.filter((article: any) => 
-              article.title.toLowerCase().includes(key.toLowerCase()) 
-            );
+            if (key !== 'getallarticles') {
+              this.articles = this.articles.filter((article: any) =>
+                article.title.toLowerCase().includes(key.toLowerCase())
+              );
+            }
             resolve(data);
           },
           error: (err) => reject(err)
@@ -125,7 +128,7 @@ export class ArticleListComponent {
         reject('Invalid type'); // Trả về lỗi nếu type không đúng
       }
     });
-  } 
+  }
   searchQuery: string = '';
   search() { }
 
@@ -142,9 +145,12 @@ export class ArticleListComponent {
   }
   goToChitiet(id: number, title: string) {
 
-    this.router.navigate([`/articles/${title}`], { queryParams: { id } });
+    this.router.navigate([`/articlesdetail/${title}`], { queryParams: { id } });
   }
-  goToSearchTagCate(type:string,key:string){
-    this.router.navigate([`/articles/${type}/${key}`] , {queryParams:{type,key}});
+  goToSearchTagCate(type: string, key: string) {
+    if (type === 'search' && key.trim() === '') {
+      key = 'getallarticles';
+    }
+    this.router.navigate([`/articles/${type}/${key}`], { queryParams: { type, key } });
   }
 }

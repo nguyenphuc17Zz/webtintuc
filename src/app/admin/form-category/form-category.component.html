@@ -36,7 +36,7 @@
           <div class="form-group">
             <label for="image_cate">Ảnh</label>
             @if (isEditing) {
-                <img  id="category-image" [src]="'../../../assets/img_category/' + category.image_cate" alt="Category Image" class="category-img">
+                <img  id="category-image" [src]="'http://localhost:3000/img_category/' + category.image_cate" alt="Category Image" class="category-img">
             }@else{
                 <img id="category-image" [src]="" alt="Category Image" class="category-img">
 

@@ -31,7 +31,7 @@ export class FormCategoryComponent {
 
 
 
-  constructor(private categoryService: categoryService ) { };
+  constructor(private categoryService: categoryService) { };
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['isVisible'] && changes['isVisible'].currentValue) {
       if (this.isEditing) {
@@ -63,7 +63,7 @@ export class FormCategoryComponent {
     const name = this.formCategory.value['category_name'].trim();
     const description = this.formCategory.value['description'].trim();
     let status = this.formCategory.value['status'];
-  
+
     if (!this.isEditing) {
       status = status === true ? 1 : 0;
       const isNameTrung = await this.checkTenTrung();
@@ -72,18 +72,21 @@ export class FormCategoryComponent {
         return;
       } else {
         if (this.imgCategory) {
-          const tenFileImg = await this.newNameForFileImage();
-          const sendImgToBackend = await this.sendImgToBackend(tenFileImg);
-          if (sendImgToBackend) {
-            this.categoryService.addCategory(name, description, tenFileImg, status).subscribe({
-              next: (data: any) => {
-                alert(data.message);
-                if (data.status === 1) {
-                  this.close.emit();
-                }
+          let formData = new FormData();
+          formData.append('image', this.imgCategory);
+          formData.append('name', name);
+          formData.append('description', description);
+          formData.append('status', status);
+          formData.append('folder', 'category'); // Thêm 'folder' để chỉ định thư mục lưu trữ
+          this.categoryService.addCategory(formData).subscribe({
+            next: (data: any) => {
+              alert(data.message);
+              if (data.status === 1) {
+                this.close.emit();
               }
-            });
-          }
+            }
+          });
+
         } else {
           alert('Chưa chọn file hình ảnh nào');
         }
@@ -108,53 +111,31 @@ export class FormCategoryComponent {
             }
           });
         } else {
-          // Cập nhật có hình ảnh
-          const tenFileImg = await this.newNameForFileImage();
-          const sendImgToBackend = await this.sendImgToBackend(tenFileImg);
           let id = this.category.category_id;
-          console.log(tenFileImg);
-          console.log(id);
-          console.log(name);
-          console.log(description);
-          console.log(tenFileImg);
-          console.log(status);
-          if (sendImgToBackend) {
-            this.categoryService.updateCategoryWithImage(id, name, description, tenFileImg, status).subscribe({
-              next: (data: any) => {
-                alert(data.message);
-                if (data.status === 1) {
-                  this.close.emit();
-                }
+          let formData = new FormData();
+          formData.append('id', id);
+          formData.append('image', this.imgCategory);
+          formData.append('name', name);
+          formData.append('description', description);
+          formData.append('status', status);
+          this.categoryService.updateCategoryWithImage(id, formData).subscribe({
+            next: (data: any) => {
+              alert(data.message);
+              if (data.status === 1) {
+                this.close.emit();
               }
-            });
-          }
+            }
+          });
+
         }
       }
     }
   }
-  
+
   // TAO SO NGAU NHIEN
 
 
-  //  SEND IMG TO BACKEND
-  sendImgToBackend(tenFileImg:string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      const formData = new FormData();
-      formData.append('file', this.imgCategory);
-      formData.append('tenFile',tenFileImg);
-      this.categoryService.uploadImage(formData).subscribe({
-        next: (data: any) => {
-          if (data.status === 1) {
-            console.log(data.message);
-            resolve(true);
-            return;
-          }
-          resolve(false);
-        }
-      }
-      );
-    })
-  }
+
   //HAM KIEM TRA CO TRUNG` TEN THE LOAI KO
   checkTenTrung(): Promise<boolean> {
     return new Promise((resolve, reject) => {
@@ -210,21 +191,21 @@ export class FormCategoryComponent {
   newNameForFileImage(): Promise<string> {
     let tenFileImage = '';
     let isExistNameImage = true;
-    return new Promise((resolve,reject)=>{
+    return new Promise((resolve, reject) => {
       this.categoryService.getAllCategories().subscribe({
-        next:(data:any)=>{
+        next: (data: any) => {
           while (isExistNameImage) {
-            tenFileImage =this.generateRandomNumberString(5); // Thêm .jpg vào tên file
+            tenFileImage = this.generateRandomNumberString(5); // Thêm .jpg vào tên file
             isExistNameImage = false;
-            for(let i =  0 ; i<data.length;i++){
+            for (let i = 0; i < data.length; i++) {
               if (data[i].image_cate === tenFileImage) {
                 isExistNameImage = true;
               }
             }
-            
+
           }
           resolve(tenFileImage);
-          return ;
+          return;
         }
       })
     })

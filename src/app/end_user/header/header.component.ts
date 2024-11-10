@@ -59,4 +59,10 @@ export class HeaderComponent implements OnInit {
     this.getAllTags();
     this.getAllCategories();
   }
+  goToSearchTagCate(type: string, key: string) {
+    if (type === 'search' && key.trim() === '') {
+      key = 'getallarticles';
+    }
+    this.router.navigate([`/articles/${type}/${key}`], { queryParams: { type, key } });
+  }
 }

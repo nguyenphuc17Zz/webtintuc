@@ -75,7 +75,7 @@ export const routes: Routes = [
         component: ArticleComponent
     },
     {
-        path: 'articles/:title',
+        path: 'articlesdetail/:title',
         component: ChitietbaivietComponent
     },
     {

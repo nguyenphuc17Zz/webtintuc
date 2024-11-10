@@ -85,7 +85,16 @@
                             
                         </tr>
                     }
-                    
+                    <!--
+                    <tr *ngFor="let user of userInPageNumber; let i = index" (click)="openForm(true, user)">
+    <td>{{ user.user_id }}</td>
+    <td>{{ user.username }}</td>
+    <td>{{ user.email }}</td>
+    <td>{{ user.role }}</td>
+    <td [ngClass]="user.status ? 'active' : 'inactive'">
+        {{ user.status ? 'Hoạt động' : 'Bị khóa' }}
+    </td>
+</tr>-->
                     
                 </tbody>
             </table>

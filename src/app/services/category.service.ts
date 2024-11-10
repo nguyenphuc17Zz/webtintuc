@@ -24,8 +24,8 @@ export class categoryService {
         return this.http.post(`${this.apiUrl}/category/uploadImage`, formData);
     }
     // ADD CATE
-    addCategory(category_name: string, description: string, image_cate: string, status: boolean) {
-        return this.http.post(`${this.apiUrl}/category/add`, { category_name, description, image_cate, status });
+    addCategory(formData: FormData) {
+        return this.http.post(`${this.apiUrl}/category/add`, formData);
     }
     // Cập nhật thể loại không có hình ảnh
     updateCategoryWithoutImage(id: number, category_name: string, description: string, status: boolean) {
@@ -33,8 +33,8 @@ export class categoryService {
     }
 
     // Cập nhật thể loại có hình ảnh
-    updateCategoryWithImage(id: number, category_name: string, description: string, image_cate: string, status: boolean) {
-        return this.http.put(`${this.apiUrl}/category/updateImg/${id}`, { category_name, description, image_cate, status });
+    updateCategoryWithImage(id: number,formData: FormData) {
+        return this.http.put(`${this.apiUrl}/category/updateImg/${id}`, formData);
     }
      // GET ALL CATEGORIES
      getAllCategoriesUser(status:number): Observable<any> {

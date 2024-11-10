@@ -23,17 +23,11 @@ export class articleService {
     }
     // ADD ARTICLE
     addArticle(
-        title: string,
-        content: string,
-        authorid: number,
-        categoryid: number,
-        status: string,
-        thumbnail: string,
-        tags: number[] // Mảng các tag ID
+        formData: FormData
     ): Observable<any> {
-        return this.http.post(`${this.apiUrl}/article/add`, {
-            title, content, authorid, categoryid, status, thumbnail, tags
-        });
+        return this.http.post(`${this.apiUrl}/article/add`,
+            formData
+        );
     }
     // GET ARTICLE BY ID
     getArticleById(id: number): Observable<any> {
@@ -55,18 +49,18 @@ export class articleService {
         return this.http.get(`${this.apiUrl}/article/getArticletTagCuTheById/${id}`);
     }
     // UPDATE ARTICLE
-    updateArticle(
-        articleId: number,
-        title: string,
-        content: string,
-        categoryid: number,
-        thumbnail: string,
-        tags: number[] // Mảng các tag ID
+    updateArticle(id: number,
+        formData: FormData
     ): Observable<any> {
-        return this.http.post(`${this.apiUrl}/article/update/${articleId}`, {
-            title, content, categoryid, thumbnail, tags
-        });
+        return this.http.put(`${this.apiUrl}/article/update/${id}`, formData);
     }
+    updateArticleNoThumbnail(id: number,
+        formData: FormData
+    ): Observable<any> {
+        return this.http.put(`${this.apiUrl}/article/updateNoThumbnail/${id}`, formData);
+    }
+
+
     // GET ALL ARTICLE
     getAllArticles2(): Observable<any> {
         return this.http.get<any>(`${this.apiUrl}/article/getAll`);
@@ -92,5 +86,5 @@ export class articleService {
     }
     getArticleTagById(id: number): Observable<any> {
         return this.http.get(`${this.apiUrl}/article/getArticletTagById/${id}`);
-      }
+    }
 }

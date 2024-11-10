@@ -18,7 +18,7 @@
     <div class="center-news">
       <div class="search-bar">
         <input type="text" placeholder="Tìm kiếm tin tức..." [(ngModel)]="searchQuery" />
-        <button (click)="search()">Tìm kiếm</button>
+        <button (click)="goToSearchTagCate('search',searchQuery)">Tìm kiếm</button>
       </div>
       @for (article of articleInPageNumber; track $index) {
         <div class="news-item" style="cursor: pointer;" (click)="goToChitiet(article.article_id,article.title)">

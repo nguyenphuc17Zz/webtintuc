@@ -25,24 +25,14 @@ export class DangnhapComponent implements OnInit {
 
     // INIT
     ngOnInit(): void{
-
-
       //this.getAllUsers();
-
-
-
     }
-
-
-
-
-
-
     //Gởi thông tin xuống backend và lấy data
     onLogin() {
       const { username, password } = this.formDangNhap.value;
       this.authService.login(username, password).subscribe({
         next: (data: any) =>{
+          console.log(data);
           if(data.status===1){
             localStorage.setItem('id', data.user.user_id);
             localStorage.setItem('role',data.user.role);
