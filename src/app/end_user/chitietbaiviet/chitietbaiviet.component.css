@@ -79,3 +79,12 @@
     text-decoration: none;
     color: #007BFF;
 }
+.article-header img {
+    max-width: 100%; /* Đảm bảo ảnh không vượt quá kích thước container */
+    height: auto; /* Giữ tỉ lệ gốc của ảnh */
+    border-radius: 8px; /* Bo tròn góc cho ảnh */
+    margin: 20px 0; /* Thêm khoảng cách giữa ảnh và nội dung xung quanh */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng đổ bóng nhẹ */
+    display: block; /* Đảm bảo ảnh là block để không bị ảnh hưởng bởi inline */
+    object-fit: cover; /* Nếu container nhỏ hơn, crop ảnh để phù hợp */
+}

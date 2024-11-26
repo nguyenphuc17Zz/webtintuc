@@ -9,7 +9,7 @@ import { FormCategoryComponent } from '../form-category/form-category.component'
 @Component({
   selector: 'app-category',
   standalone: true,
-  imports: [LayoutComponent, FormsModule, CategoryComponent, FormCategoryComponent],
+  imports: [LayoutComponent, FormsModule,  FormCategoryComponent],
   templateUrl: './category.component.html',
   styleUrl: './category.component.css'
 })

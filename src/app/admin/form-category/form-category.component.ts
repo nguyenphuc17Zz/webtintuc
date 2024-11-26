@@ -132,11 +132,9 @@ export class FormCategoryComponent {
     }
   }
 
-  // TAO SO NGAU NHIEN
 
 
 
-  //HAM KIEM TRA CO TRUNG` TEN THE LOAI KO
   checkTenTrung(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       let name = this.formCategory.value['category_name'].trim().toLowerCase();
@@ -176,40 +174,7 @@ export class FormCategoryComponent {
 
     }
   }
-  // HÀM TẠO SỐ NGẪU NHIÊN
-  generateRandomNumberString(length: number): string {
-    const characters = '0123456789';
-    let result = '';
-    const charactersLength = characters.length;
-
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-
-    return result + '.jpg';
-  }
-  newNameForFileImage(): Promise<string> {
-    let tenFileImage = '';
-    let isExistNameImage = true;
-    return new Promise((resolve, reject) => {
-      this.categoryService.getAllCategories().subscribe({
-        next: (data: any) => {
-          while (isExistNameImage) {
-            tenFileImage = this.generateRandomNumberString(5); // Thêm .jpg vào tên file
-            isExistNameImage = false;
-            for (let i = 0; i < data.length; i++) {
-              if (data[i].image_cate === tenFileImage) {
-                isExistNameImage = true;
-              }
-            }
-
-          }
-          resolve(tenFileImage);
-          return;
-        }
-      })
-    })
-  }
-
+ 
+  
 
 }

@@ -10,6 +10,7 @@
         <div class="article-author">
             <p>{{article.tentacgia}} - {{article.published_at}}</p>
         </div>
+        <img [src]="'http://localhost:3000/img_thumbnail/'+article.thumbnail_url" alt="">
     </div>
     <div class="article-content" [innerHTML]="article.content"></div>
 
@@ -20,24 +21,6 @@
             </li>
         </ul>
     </div>
-    <!--
-        <div class="related-articles">
-            <h2>Bài viết liên quan</h2>
-            <div class="grid-container">
-                <div class="grid-item">
-                    <img src="thumbnail1.jpg" alt="Bài viết 1">
-                    <h3><a href="#">Bài viết liên quan 1</a></h3>
-                </div>
-                <div class="grid-item">
-                    <img src="thumbnail2.jpg" alt="Bài viết 2">
-                    <h3><a href="#">Bài viết liên quan 2</a></h3>
-                </div>
-                <div class="grid-item">
-                    <img src="thumbnail3.jpg" alt="Bài viết 3">
-                    <h3><a href="#">Bài viết liên quan 3</a></h3>
-                </div>
-            </div>
-        </div>
-    -->
+
 </div>
 <app-footer></app-footer>

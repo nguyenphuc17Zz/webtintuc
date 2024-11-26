@@ -36,11 +36,12 @@ export class DangnhapComponent implements OnInit {
           if(data.status===1){
             localStorage.setItem('id', data.user.user_id);
             localStorage.setItem('role',data.user.role);
-            if(data.user.role === 'admin' || data.user.role==='editor'){
+            if(data.user.role === 'admin'){
               this.router.navigate(['/admin']);
             }else if(data.user.role === 'viewer'){
               this.router.navigate(['/trangchu']);
             }else{
+              this.router.navigate(['/admin/article']);
 
             }
             //this.router.navigate(['/trangchu']);

@@ -81,7 +81,7 @@ export class ArticleListComponent {
       this.type = params['type'];
       this.key = params['key'];
 
-      this.setUp(); // Gọi hàm setUp() nếu có logic riêng cho phần này
+      this.setUp(); 
 
       // Đợi cho hàm setUpArticle() hoàn thành
       await this.setUpArticle(this.type, this.key);

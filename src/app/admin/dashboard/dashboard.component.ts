@@ -77,22 +77,7 @@ export class DashboardComponent implements OnInit {
     this.filterObj.Status = 'all';
     this.getAllArticle();
   }
-  toggleStatus(event: Event) {
-    event.stopPropagation(); // Ngăn chặn sự kiện click lan ra ngoài hàng <tr>
-    const target = event.target as HTMLElement;
-    let articleId = Number(target.getAttribute('data-id'));
-    let articleStatus = target.getAttribute('data-status');
-    articleStatus = articleStatus === 'choduyet' ? 'nhap' : 'choduyet';
-    this.articleService.updateArticleStatus(articleId, articleStatus).subscribe({
-      next: (data: any) => {
-        if (data.status === 1) {
-          this.refresh();
-        } else {
-          alert('Cập nhật thất bại');
-        }
-      }
-    })
-  }
+
   onSearch() {
 
     this.filterObj.PageNumber = 1;

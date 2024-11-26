@@ -144,10 +144,6 @@ export class FormArticleComponent implements OnInit {
   updateSelectedTags() {
     this.selectedTags = this.tagsNow.map(tag => tag.tag_name).join(', '); // Kết hợp tên tag thành chuỗi
   }
-
-
-
-
   onFileSelected(event: any): void {
     const file = event.target.files[0];
 
@@ -164,13 +160,4 @@ export class FormArticleComponent implements OnInit {
 
     }
   }
-
-
-
-
-
-
-
-
-
 }

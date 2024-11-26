@@ -38,6 +38,7 @@ export class FormUpdateArticleComponent {
     defaultParagraphSeparator: 'p',
     defaultFontName: 'Arial',
   };
+  article_status:string="";
   baiVietCurrent: any;
   tagCurrent: any;
   constructor(private articleService: articleService, private tagService: TagService
@@ -67,6 +68,8 @@ export class FormUpdateArticleComponent {
     if (changes['isVisible'] && changes['isVisible'].currentValue) {
       this.tagsNow = [];
       let baivietId = await this.getArticleById(this.id_article);
+      this.article_status = baivietId[0].status;
+     
       this.id = this.id_article;
       this.imgThumbnail = null;
       this.tags = await this.getAllTags();
@@ -131,6 +134,7 @@ export class FormUpdateArticleComponent {
     if (this.imgThumbnail) {
       formData.append('thumbnail', this.imgThumbnail);
     }
+    formData.append('status',this.article_status);
     formData.append('title', title);
     formData.append('content', description);
     formData.append('category_id', category);

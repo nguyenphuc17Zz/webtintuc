@@ -10,10 +10,10 @@ export class articleService {
 
     // UPLOAD IMAGE
     // Hàm để upload hình ảnh
-    uploadThumbnail(formData: FormData): Observable<any> {
-        // Gửi request POST với dữ liệu FormData
-        return this.http.post(`${this.apiUrl}/thumbnail/uploadImage`, formData);
-    }
+    // uploadThumbnail(formData: FormData): Observable<any> {
+    //     // Gửi request POST với dữ liệu FormData
+    //     return this.http.post(`${this.apiUrl}/thumbnail/uploadImage`, formData);
+    // }
     // GET ALL CATEGORIES
     getAllArticles(): Observable<any> {
         return this.http.get<any>(`${this.apiUrl}/article`);

@@ -522,7 +522,7 @@ app.use('/img_article', express.static(imgContentDir));
 
 // API ADD ARTICLE WITH TAGS
 app.post('/api/article/add', uploadThumbnail.single('thumbnail'), (req, res) => {
-  let { title, content, author_id, category_id, status, tags } = req.body;
+  let { title, content, author_id, category_id, status, tag } = req.body;
 
 
 
@@ -575,9 +575,9 @@ app.post('/api/article/add', uploadThumbnail.single('thumbnail'), (req, res) => 
     const articleId = result.insertId; // ID của bài viết vừa tạo
 
     // Lưu các tag liên kết với bài viết
-    if (tags && tags.length > 0) {
-      const tagInsertSql = 'INSERT INTO article_tags (article_id, tag_id) VALUES ?';
-      const tagValues = tags.map(tagId => [articleId, tagId]);
+    if (tag && tag.length > 0) {
+      const tagInsertSql = 'INSERT INTO article_tag (article_id, tag_id) VALUES ?';
+      const tagValues = tag.map(tagId => [articleId, tagId]);
 
       db.query(tagInsertSql, [tagValues], (err, result) => {
         if (err) {
@@ -688,7 +688,7 @@ app.get('/api/article/getArticletTagCuTheById/:id', (req, res) => {
 // API UPDATE ARTICLE WITH TAGS
 app.put('/api/article/update/:id', uploadThumbnail.single('thumbnail'), (req, res) => {
   const articleId = req.params.id;
-  const { title, content, author_id, category_id, status, tags } = req.body;
+  const { title, content, author_id, category_id, status, tag } = req.body;
 
   console.log('Received PUT request for article update:', articleId);
 
@@ -718,6 +718,7 @@ app.put('/api/article/update/:id', uploadThumbnail.single('thumbnail'), (req, re
 
     imageNameThumbnail = imageFileNameThumbnail; // Assign the new file name to store in DB
   }
+
 
   // Process and update images in the description
   let imageUrls = [];
@@ -768,15 +769,13 @@ app.put('/api/article/update/:id', uploadThumbnail.single('thumbnail'), (req, re
   const now = new Date();
   db.promise().query(sql, [title, processedContent, author_id, category_id, status, imageNameThumbnail, now, articleId])
     .then(() => {
-      console.log('Article updated successfully.');
-
       // Update tags if any were provided
-      if (tags && tags.length > 0) {
+      if (tag && tag.length > 0) {
         const deleteOldTagsSql = 'DELETE FROM article_tag WHERE article_id = ?';
         db.promise().query(deleteOldTagsSql, [articleId]);
 
         const tagInsertSql = 'INSERT INTO article_tag (article_id, tag_id) VALUES ?';
-        const tagValues = tags.map(tagId => [articleId, tagId]);
+        const tagValues = tag.map(tagId => [articleId, tagId]);
         db.promise().query(tagInsertSql, [tagValues]);
 
         console.log('Tags updated:', tagValues);
@@ -805,9 +804,9 @@ const upload = multer({ storage: storage });
 // API UPDATE ARTICLE NO THUMBNAIL
 app.put('/api/article/updateNoThumbnail/:id',upload.none(), (req, res) => {
   const articleId = req.params.id;
-  const { title, content, author_id, category_id, status, tags } = req.body;
+  const { title, content, author_id, category_id, status, tag } = req.body;
+  console.log(" day la console.log check tags",tag);
 
-  console.log('Received PUT request for article update:', articleId);
 
   // Check if a new thumbnail image is provided and save it
 
@@ -825,7 +824,6 @@ app.put('/api/article/updateNoThumbnail/:id',upload.none(), (req, res) => {
     return `http://localhost:3000/img_article/${fileName}`;
   });
 
-  console.log('Processed content:', processedContent);
 
   // Get old images from the article to delete those that were removed
   const oldContentSql = 'SELECT content FROM article WHERE article_id = ?';
@@ -863,12 +861,12 @@ app.put('/api/article/updateNoThumbnail/:id',upload.none(), (req, res) => {
       console.log('Article updated successfully.');
 
       // Update tags if any were provided
-      if (tags && tags.length > 0) {
+      if (tag && tag.length > 0) {
         const deleteOldTagsSql = 'DELETE FROM article_tag WHERE article_id = ?';
         db.promise().query(deleteOldTagsSql, [articleId]);
 
         const tagInsertSql = 'INSERT INTO article_tag (article_id, tag_id) VALUES ?';
-        const tagValues = tags.map(tagId => [articleId, tagId]);
+        const tagValues = tag.map(tagId => [articleId, tagId]);
         db.promise().query(tagInsertSql, [tagValues]);
 
         console.log('Tags updated:', tagValues);
